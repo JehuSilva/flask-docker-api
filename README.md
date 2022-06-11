@@ -7,7 +7,7 @@ Under development
 
 ## General Information
 
-## Under development
+Under development
 
 ## Technologies
 
@@ -16,6 +16,19 @@ Under development
 - [PostgreSQL](https://www.postgresql.org/)
 
 ## Build
+
+### Prerequisites
+
+To use the application you must to difine you environment variables. You must to create a `.env.dev` in the root directory of the project with the following content:
+
+```bash
+FLASK_APP=app/__init__.py
+FLASK_ENV=development
+DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+SQL_HOST=db
+SQL_PORT=5432
+DATABASE=postgres
+```
 
 ### Development
 

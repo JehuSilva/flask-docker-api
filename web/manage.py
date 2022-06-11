@@ -4,7 +4,10 @@ from app import app, db, Register
 
 cli = FlaskGroup(app)
 
+# Defining the command line interface
 
+
+# Command to create the database
 @cli.command("create_db")
 def create_db():
     db.drop_all()
@@ -12,6 +15,7 @@ def create_db():
     db.session.commit()
 
 
+# Command to add a register
 @cli.command("seed_db")
 def seed_db():
     db.session.add(Register(

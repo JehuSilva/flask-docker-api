@@ -53,3 +53,30 @@ If you want to kill the containers and clean the volumes:
 docker-compose down -v
 ```
 
+### Production
+
+Instructions for setting up the production environment:
+
+
+Update the file permissions locally:
+
+```bash
+chmod +x services/web/entrypoint.sh
+```
+
+After that, run the following command to build the image:
+
+```bash
+docker-compose -f docker-compose.prod.yml up -d --build
+```
+
+Build the database using the SQLAlchemy ORM:
+```bash
+docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
+```
+
+If you want to kill the containers and clean the volumes:
+
+```bash
+docker-compose -f docker-compose.prod.yml down -v
+```

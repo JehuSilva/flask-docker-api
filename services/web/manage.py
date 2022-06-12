@@ -1,35 +1,18 @@
 from flask.cli import FlaskGroup
 
-from app import app, db, Register
+from app import app
+from app.models import DataBase
 
 cli = FlaskGroup(app)
 
-# Defining the command line interface
 
-
-# Command to create the database
-@cli.command("create_db")
-def create_db():
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
-
-
-# Command to add a register
-@cli.command("seed_db")
-def seed_db():
-    db.session.add(Register(
-        name="John Doe",
-        address="123 Main St",
-        city="Anytown",
-        state="CA",
-        zip_code="90210",
-        phone1="555-555-1234",
-        phone2="555-555-1235",
-        email="john_doe@email.com",
-        department="Sales"
-    ))
-    db.session.commit()
+@cli.command('migrate')
+def migrate():
+    '''
+    This method migrate the schema
+    '''
+    db = DataBase()
+    db.create_schema()
 
 
 if __name__ == "__main__":

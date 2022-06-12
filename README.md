@@ -43,7 +43,6 @@ After that, run the following command to build the image:
 
 ```bash
 docker-compose up -d --build
-docker-compose exec web python manage.py seed_db
 docker-compose exec db psql --username=postgres --dbname=postgres
 ```
 
@@ -72,7 +71,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 
 Build the database using the SQLAlchemy ORM:
 ```bash
-docker-compose -f docker-compose.prod.yml exec web python manage.py create_db
+docker-compose -f docker-compose.prod.yml exec web python manage.py migrate
 ```
 
 If you want to kill the containers and clean the volumes:

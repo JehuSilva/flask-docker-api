@@ -25,6 +25,7 @@ services:
       - db
   nginx:
     build: ./services/nginx
+    container_name: gninx
     image: nginx
     ports:
       - 80:80

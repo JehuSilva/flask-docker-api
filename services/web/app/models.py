@@ -26,6 +26,7 @@ class DBConnector(Config):
             with self.get_db_connection() as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(query)
+                    return cursor.fetchall()
                     connection.commit()
         except Exception as e:
             raise(e)
@@ -44,71 +45,220 @@ class DBConnector(Config):
             raise(e)
 
 
-class Employee():
-    '''
-    This class manage the employee table
-    '''
-
-    def __init__(self):
-        self.id = None
-        self.first_name = None
-        self.last_name = None
-        self.email = None
-        self.phone1 = None
-        self.phone2 = None
-
-
-class Company(DBConnector):
-    '''
-    This class manage the company table
-    '''
-
-    def __init__(self):
-        self.id = None
-        self.name = None
-        self.address = None
-        self.city = None
-        self.state = None
-        self.zip_code = None
-
-
 class DataBase(DBConnector):
     '''
     Class to handle the companies and employees schema
     '''
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, schema='sandbox'):
+        self.schema = schema
 
-    def create_schema(self, schema='sandbox'):
+    def create_schema(self):
         '''
-        Create the schema sandbox
+        Create the schema
         '''
         self.execute_multiple([
             f'''
-            DROP SCHEMA IF EXISTS {schema} CASCADE;
+            DROP SCHEMA IF EXISTS {self.schema} CASCADE;
             ''',
             f'''
-            CREATE SCHEMA {schema};
+            CREATE SCHEMA {self.schema};
             ''',
             f'''
-            CREATE TABLE {schema}.employee (
-                id serial PRIMARY KEY,
+            CREATE TABLE {self.schema}.employee (
+                employee_id serial PRIMARY KEY,
                 first_name varchar(50) NOT NULL,
                 last_name varchar(50) NOT NULL,
-                email varchar(50) NOT NULL,
+                email varchar(50) UNIQUE NOT NULL,
                 phone1 varchar(50) NOT NULL,
                 phone2 varchar(50)
             );
             ''',
             f'''
-            CREATE TABLE {schema}.company (
-                id serial PRIMARY KEY,
+            CREATE TABLE {self.schema}.company (
+                company_id serial PRIMARY KEY,
                 name varchar(50) NOT NULL,
                 address varchar(50) NOT NULL,
-                city varchar(50) NOT NULL,
+                city varchar(50) UNIQUE NOT NULL,
                 state varchar(50) NOT NULL,
-                zip_code varchar(50) NOT NULL
+                zip varchar(50) NOT NULL
+            );
+            ''',
+            f'''
+            CREATE TABLE {self.schema}.department (
+                department_id serial PRIMARY KEY,
+                name varchar(50) NOT NULL
+            );
+            ''',
+            f'''
+            CREATE TABLE {self.schema}.company_link (
+            id serial PRIMARY KEY,
+            employee_id INT NOT NULL,
+            company_id INT NOT NULL,
+            FOREIGN KEY (employee_id)
+                REFERENCES {self.schema}.employee (employee_id),
+            FOREIGN KEY (company_id)
+                REFERENCES {self.schema}.company (company_id)
+            );
+            ''',
+            f'''
+            CREATE TABLE {self.schema}.department_link (
+            id serial PRIMARY KEY,
+            employee_id INT NOT NULL,
+            department_id INT NOT null,
+            FOREIGN KEY (employee_id)
+                REFERENCES {self.schema}.employee (employee_id),
+            FOREIGN KEY (department_id)
+                REFERENCES {self.schema}.department (department_id)
             );
             ''',
         ])
+
+
+class Employee(DataBase):
+    '''
+    This class manage the employee table
+    '''
+    table = 'employee'
+
+    def __init__(self):
+        DataBase.__init__(self)
+
+    def insert(self, first_name: str, last_name: str, email: str, phone1: str, phone2: str) -> int:
+        '''
+        Inserts an employee into the database and returns the id
+        '''
+        response = self.execute_one(
+            f'''
+            INSERT INTO {self.schema}.{self.table} (
+                first_name,
+                last_name,
+                email,
+                phone1,
+                phone2
+            ) VALUES (
+                '{first_name}',
+                '{last_name}',
+                '{email}',
+                '{phone1}',
+                '{phone2}'
+            ) ON CONFLICT DO NOTHING
+            RETURNING employee_id;
+            '''
+        )
+        return response[0][0]
+
+
+class Company(DataBase):
+    '''
+    This class manage the company table
+    '''
+    table = 'company'
+
+    def __init__(self):
+        DataBase.__init__(self)
+
+    def insert(self, name: str, address: str, city: str, state: str, zip_code: str) -> int:
+        '''
+        Inserts a company into the database and returns the id
+        '''
+        response = self.execute_one(
+            f'''
+            INSERT INTO {self.schema}.{self.table} (
+                name,
+                address,
+                city,
+                state,
+                zip
+            ) VALUES (
+                '{name}', 
+                '{address}', 
+                '{city}', 
+                '{state}', 
+                '{zip_code}'
+            ) ON CONFLICT DO NOTHING
+            RETURNING company_id;
+            '''
+        )
+        return response[0][0]
+
+
+class Department(DataBase):
+    '''*
+    This class manage the department table
+    '''
+
+    table = 'department'
+
+    def __init__(self):
+        DBConnector.__init__(self)
+
+    def insert(self, name: str) -> int:
+        '''
+        Inserts a department into the database and returns the id
+        '''
+        response = self.execute_one(
+            f'''
+            INSERT INTO {self.schema}.{self.table} (
+                name
+            ) VALUES (
+                '{name}'
+            ) ON CONFLICT DO NOTHING
+            RETURNING department_id;
+            '''
+        )
+        return response[0][0]
+
+
+class CompanyLink(DataBase):
+    '''
+    This class manage the company_link table
+    '''
+
+    table = 'company_link'
+
+    def __init__(self):
+        DataBase.__init__(self)
+
+    def insert(self, employee_id: int, company_id: int):
+        '''
+        Inserts a company link into the database
+        '''
+        self.execute_one(
+            f'''
+            INSERT INTO {self.schema}.{self.table} (
+                employee_id,
+                company_id
+            ) VALUES (
+                {employee_id},
+                {company_id}
+            ) ON CONFLICT DO NOTHING;
+            '''
+        )
+
+
+class DepartmentLink(DataBase):
+    '''
+    This class manage the department_link table
+    '''
+
+    table = 'department_link'
+
+    def __init__(self):
+        DataBase.__init__(self)
+
+    def insert(self, employee_id: int, department_id: int):
+        '''
+        Inserts a department link into the database
+        '''
+        self.execute_one(
+            f'''
+            INSERT INTO {self.schema}.{self.table} (
+                employee_id,
+                department_id
+            ) VALUES (
+                {employee_id},
+                {department_id}
+            ) ON CONFLICT DO NOTHING;
+            '''
+        )

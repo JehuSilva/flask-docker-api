@@ -136,9 +136,9 @@ class Employee(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (first_name,last_name,email,phone1,phone2) 
-            VALUES ('{first_name}','{last_name}','{email}','{phone1}','{phone2}') 
-            ON CONFLICT (email) DO UPDATE 
+            INSERT INTO {self.schema}.{self.table} (first_name,last_name,email,phone1,phone2)
+            VALUES ('{first_name}','{last_name}','{email}','{phone1}','{phone2}')
+            ON CONFLICT (email) DO UPDATE
                 SET email=excluded.email
             RETURNING employee_id;
             '''
@@ -161,9 +161,9 @@ class Company(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (name,address,city,state,zip) 
-            VALUES ('{name}', '{address}', '{city}', '{state}', '{zip_code}') 
-            ON CONFLICT (name) DO UPDATE 
+            INSERT INTO {self.schema}.{self.table} (name,address,city,state,zip)
+            VALUES ('{name}', '{address}', '{city}', '{state}', '{zip_code}')
+            ON CONFLICT (name) DO UPDATE
                 SET name=excluded.name
             RETURNING company_id;
             '''
@@ -187,9 +187,9 @@ class Department(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (name) 
-                VALUES ('{name}') 
-            ON CONFLICT (name) DO UPDATE 
+            INSERT INTO {self.schema}.{self.table} (name)
+                VALUES ('{name}')
+            ON CONFLICT (name) DO UPDATE
                 SET name=excluded.name
             RETURNING department_id;
             '''
@@ -213,9 +213,9 @@ class CompanyLink(DataBase):
         '''
         self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (employee_id,company_id) 
-            VALUES ({employee_id},{company_id}) 
-            ON CONFLICT (employee_id, company_id) DO UPDATE 
+            INSERT INTO {self.schema}.{self.table} (employee_id,company_id)
+            VALUES ({employee_id},{company_id})
+            ON CONFLICT (employee_id, company_id) DO UPDATE
                 SET employee_id=excluded.employee_id, company_id=excluded.company_id;
             ''', enable_fetch=False
         )
@@ -237,8 +237,8 @@ class DepartmentLink(DataBase):
         '''
         self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (employee_id,department_id) 
-            VALUES ({employee_id},{department_id}) 
+            INSERT INTO {self.schema}.{self.table} (employee_id,department_id)
+            VALUES ({employee_id},{department_id})
             ON CONFLICT (employee_id, department_id) DO UPDATE
                 SET employee_id=excluded.employee_id, department_id=excluded.department_id;
             ''', enable_fetch=False

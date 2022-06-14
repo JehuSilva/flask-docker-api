@@ -1,15 +1,16 @@
-from flask.cli import FlaskGroup
-
 from app import app
 from app.models import DataBase
+from flask.cli import FlaskGroup
 
+# Initialize Flask app with Flask-CLI
 cli = FlaskGroup(app)
 
 
 @cli.command('migrate')
 def migrate():
     '''
-    This method migrate the schema
+    This method is a mechanism to create
+    the schema and tables.
     '''
     db = DataBase()
     db.create_schema()

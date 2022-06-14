@@ -96,10 +96,10 @@ class DataBase(DBConnector):
             ''',
             f'''
             CREATE TABLE {self.schema}.employee_company(
-	            id serial PRIMARY KEY,
-	            employee_id INT NOT NULL,
-	            company_id INT NOT NULL,
-	            department_id INT NOT NULL,
+            id serial PRIMARY KEY,
+            employee_id INT NOT NULL,
+            company_id INT NOT NULL,
+            department_id INT NOT NULL,
             UNIQUE (employee_id, company_id, department_id),
             FOREIGN KEY (employee_id)
                 REFERENCES {self.schema}.employee (employee_id),
@@ -118,11 +118,11 @@ class DataBase(DBConnector):
         response = self.execute_one(f'''
             SELECT e.*,c.*,d.*
             FROM {self.schema}.employee_company ec
-            INNER JOIN {self.schema}.employee e  
-                on e.employee_id = ec.employee_id 
-            INNER JOIN {self.schema}.company c 
+            INNER JOIN {self.schema}.employee e
+                on e.employee_id = ec.employee_id
+            INNER JOIN {self.schema}.company c
                 on c.company_id = ec.company_id
-            INNER JOIN {self.schema}.department d 
+            INNER JOIN {self.schema}.department d
                 on d.department_id = ec.department_id;
         ''')
         return response

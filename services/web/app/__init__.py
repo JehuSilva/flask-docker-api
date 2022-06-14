@@ -80,6 +80,6 @@ def create_registry():
         employee_company.insert(employee_id, company_id, department_id)
 
     except Exception as e:
-        return jsonify({'message': f'Error creating registry', 'error': str(e)}), 500
+        return jsonify({'message': 'Error creating registry', 'error': str(e)}), 500
 
     return jsonify({'message': 'Registry created successfully'}), 200

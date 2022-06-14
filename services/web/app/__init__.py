@@ -5,9 +5,7 @@ Database model definition
 import os
 
 from flask import Flask, jsonify, request
-from app.models import (
-    Employee, Company, Department, CompanyLink, DepartmentLink
-)
+from app.models import Employee, Company, Department, CompanyEmployee
 
 app = Flask(__name__)
 
@@ -26,8 +24,7 @@ def create_registry():
     employee = Employee()
     company = Company()
     department = Department()
-    company_link = CompanyLink()
-    department_link = DepartmentLink()
+    employee_company = CompanyEmployee()
 
     # Retrieve the data from the request
     try:
@@ -53,10 +50,9 @@ def create_registry():
             company_name, address, city, state, zip_code
         )
         department_id = department.insert(department_name)
-        company_link.insert(employee_id, company_id)
-        department_link.insert(employee_id, department_id)
+        employee_company.insert(employee_id, company_id, department_id)
 
     except Exception as e:
-        return jsonify({'message': f'Error creating registry: {employee_id}, {company_id} {department_id}', 'error': str(e)}), 500
+        return jsonify({'message': f'Error creating registry', 'error': str(e)}), 500
 
-    return jsonify({'message': 'Registry created'}), 200
+    return jsonify({'message': 'Registry created successfully'}), 200

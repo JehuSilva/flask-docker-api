@@ -95,29 +95,20 @@ class DataBase(DBConnector):
             );
             ''',
             f'''
-            CREATE TABLE {self.schema}.company_link (
-            id serial PRIMARY KEY,
-            employee_id INT NOT NULL,
-            company_id INT NOT NULL,
-            UNIQUE (employee_id, company_id),
+            CREATE TABLE {self.schema}.employee_company(
+	            id serial PRIMARY KEY,
+	            employee_id INT NOT NULL,
+	            company_id INT NOT NULL,
+	            department_id INT NOT NULL,
+            UNIQUE (employee_id, company_id, department_id),
             FOREIGN KEY (employee_id)
                 REFERENCES {self.schema}.employee (employee_id),
             FOREIGN KEY (company_id)
-                REFERENCES {self.schema}.company (company_id)
-            );
-            ''',
-            f'''
-            CREATE TABLE {self.schema}.department_link (
-            id serial PRIMARY KEY,
-            employee_id INT NOT NULL,
-            department_id INT NOT NULL,
-            UNIQUE (employee_id, department_id),
-            FOREIGN KEY (employee_id)
-                REFERENCES {self.schema}.employee (employee_id),
+                REFERENCES {self.schema}.company (company_id),
             FOREIGN KEY (department_id)
                 REFERENCES {self.schema}.department (department_id)
             );
-            ''',
+            '''
         ])
 
 
@@ -197,49 +188,30 @@ class Department(DataBase):
         return response[0][0]
 
 
-class CompanyLink(DataBase):
+class CompanyEmployee(DataBase):
     '''
-    This class manage the company_link table
+    This class manage the company employee, it manages
+    the links between the company, the employee and the department.
     '''
-
-    table = 'company_link'
+    table = 'employee_company'
 
     def __init__(self):
         DataBase.__init__(self)
 
-    def insert(self, employee_id: int, company_id: int):
+    def insert(self, employee_id: int, company_id: int, department_id: int):
         '''
-        Inserts a company link into the database
-        '''
-        self.execute_one(
-            f'''
-            INSERT INTO {self.schema}.{self.table} (employee_id,company_id)
-            VALUES ({employee_id},{company_id})
-            ON CONFLICT (employee_id, company_id) DO UPDATE
-                SET employee_id=excluded.employee_id, company_id=excluded.company_id;
-            ''', enable_fetch=False
-        )
-
-
-class DepartmentLink(DataBase):
-    '''
-    This class manage the department_link table
-    '''
-
-    table = 'department_link'
-
-    def __init__(self):
-        DataBase.__init__(self)
-
-    def insert(self, employee_id: int, department_id: int):
-        '''
-        Inserts a department link into the database
+        Inserts a company employee into the database
         '''
         self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (employee_id,department_id)
-            VALUES ({employee_id},{department_id})
-            ON CONFLICT (employee_id, department_id) DO UPDATE
-                SET employee_id=excluded.employee_id, department_id=excluded.department_id;
-            ''', enable_fetch=False
+            INSERT INTO {self.schema}.{self.table} (
+                employee_id, company_id, department_id
+            )
+            VALUES ({employee_id}, {company_id}, {department_id})
+            ON CONFLICT (employee_id, company_id, department_id) DO UPDATE
+                SET employee_id=excluded.employee_id,
+                    company_id=excluded.company_id,
+                    department_id=excluded.department_id
+            RETURNING id;
+            '''
         )

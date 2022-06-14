@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 @ app.route("/")
 def hello_world():
-    return jsonify(message="hello from flask server. This application is a test of Xal Digital"), 200
+    return jsonify(message="hello from flask server**"), 200
 
 
 @app.route("/registry/list", methods=["GET"])

@@ -41,7 +41,7 @@ def create_registry():
         city = request.args.get('city')
         state = request.args.get('state')
         zip_code = request.args.get('zip')
-        department = request.args.get('department')
+        department_name = request.args.get('department')
     except Exception as e:
         return jsonify({'message': 'Bad parameters', 'error': str(e)}), 400
 
@@ -52,11 +52,11 @@ def create_registry():
         company_id = company.insert(
             company_name, address, city, state, zip_code
         )
-        department_id = department.insert(department)
-
+        department_id = department.insert(department_name)
         company_link.insert(employee_id, company_id)
         department_link.insert(employee_id, department_id)
+
     except Exception as e:
-        return jsonify({'message': 'Error creating registry', 'error': str(e)}), 500
+        return jsonify({'message': f'Error creating registry: {employee_id}, {company_id} {department_id}', 'error': str(e)}), 500
 
     return jsonify({'message': 'Registry created'}), 200

@@ -18,7 +18,7 @@ class DBConnector(Config):
             password=self.db_password,
         )
 
-    def execute_one(self, query):
+    def execute_one(self, query, enable_fetch: bool = True):
         '''
         Executes one query
         '''
@@ -26,10 +26,14 @@ class DBConnector(Config):
             with self.get_db_connection() as connection:
                 with connection.cursor() as cursor:
                     cursor.execute(query)
-                    return cursor.fetchall()
                     connection.commit()
+                    if enable_fetch:
+                        response = cursor.fetchall()
+                    else:
+                        response = None
         except Exception as e:
             raise(e)
+        return response
 
     def execute_multiple(self, queries: list):
         '''
@@ -77,9 +81,9 @@ class DataBase(DBConnector):
             f'''
             CREATE TABLE {self.schema}.company (
                 company_id serial PRIMARY KEY,
-                name varchar(50) NOT NULL,
+                name varchar(50) UNIQUE NOT NULL,
                 address varchar(50) NOT NULL,
-                city varchar(50) UNIQUE NOT NULL,
+                city varchar(50) NOT NULL,
                 state varchar(50) NOT NULL,
                 zip varchar(50) NOT NULL
             );
@@ -87,7 +91,7 @@ class DataBase(DBConnector):
             f'''
             CREATE TABLE {self.schema}.department (
                 department_id serial PRIMARY KEY,
-                name varchar(50) NOT NULL
+                name varchar(50) UNIQUE NOT NULL
             );
             ''',
             f'''
@@ -95,6 +99,7 @@ class DataBase(DBConnector):
             id serial PRIMARY KEY,
             employee_id INT NOT NULL,
             company_id INT NOT NULL,
+            UNIQUE (employee_id, company_id),
             FOREIGN KEY (employee_id)
                 REFERENCES {self.schema}.employee (employee_id),
             FOREIGN KEY (company_id)
@@ -105,7 +110,8 @@ class DataBase(DBConnector):
             CREATE TABLE {self.schema}.department_link (
             id serial PRIMARY KEY,
             employee_id INT NOT NULL,
-            department_id INT NOT null,
+            department_id INT NOT NULL,
+            UNIQUE (employee_id, department_id),
             FOREIGN KEY (employee_id)
                 REFERENCES {self.schema}.employee (employee_id),
             FOREIGN KEY (department_id)
@@ -130,19 +136,10 @@ class Employee(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (
-                first_name,
-                last_name,
-                email,
-                phone1,
-                phone2
-            ) VALUES (
-                '{first_name}',
-                '{last_name}',
-                '{email}',
-                '{phone1}',
-                '{phone2}'
-            ) ON CONFLICT DO NOTHING
+            INSERT INTO {self.schema}.{self.table} (first_name,last_name,email,phone1,phone2) 
+            VALUES ('{first_name}','{last_name}','{email}','{phone1}','{phone2}') 
+            ON CONFLICT (email) DO UPDATE 
+                SET email=excluded.email
             RETURNING employee_id;
             '''
         )
@@ -164,19 +161,10 @@ class Company(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (
-                name,
-                address,
-                city,
-                state,
-                zip
-            ) VALUES (
-                '{name}', 
-                '{address}', 
-                '{city}', 
-                '{state}', 
-                '{zip_code}'
-            ) ON CONFLICT DO NOTHING
+            INSERT INTO {self.schema}.{self.table} (name,address,city,state,zip) 
+            VALUES ('{name}', '{address}', '{city}', '{state}', '{zip_code}') 
+            ON CONFLICT (name) DO UPDATE 
+                SET name=excluded.name
             RETURNING company_id;
             '''
         )
@@ -191,7 +179,7 @@ class Department(DataBase):
     table = 'department'
 
     def __init__(self):
-        DBConnector.__init__(self)
+        DataBase.__init__(self)
 
     def insert(self, name: str) -> int:
         '''
@@ -199,11 +187,10 @@ class Department(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (
-                name
-            ) VALUES (
-                '{name}'
-            ) ON CONFLICT DO NOTHING
+            INSERT INTO {self.schema}.{self.table} (name) 
+                VALUES ('{name}') 
+            ON CONFLICT (name) DO UPDATE 
+                SET name=excluded.name
             RETURNING department_id;
             '''
         )
@@ -226,14 +213,11 @@ class CompanyLink(DataBase):
         '''
         self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (
-                employee_id,
-                company_id
-            ) VALUES (
-                {employee_id},
-                {company_id}
-            ) ON CONFLICT DO NOTHING;
-            '''
+            INSERT INTO {self.schema}.{self.table} (employee_id,company_id) 
+            VALUES ({employee_id},{company_id}) 
+            ON CONFLICT (employee_id, company_id) DO UPDATE 
+                SET employee_id=excluded.employee_id, company_id=excluded.company_id;
+            ''', enable_fetch=False
         )
 
 
@@ -253,12 +237,9 @@ class DepartmentLink(DataBase):
         '''
         self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (
-                employee_id,
-                department_id
-            ) VALUES (
-                {employee_id},
-                {department_id}
-            ) ON CONFLICT DO NOTHING;
-            '''
+            INSERT INTO {self.schema}.{self.table} (employee_id,department_id) 
+            VALUES ({employee_id},{department_id}) 
+            ON CONFLICT (employee_id, department_id) DO UPDATE
+                SET employee_id=excluded.employee_id, department_id=excluded.department_id;
+            ''', enable_fetch=False
         )

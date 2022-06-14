@@ -22,3 +22,6 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
+
+    - name: Build and start containers
+      run: docker-compose -f docker-compose.prod.yml up -d --build

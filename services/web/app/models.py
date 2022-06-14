@@ -111,6 +111,22 @@ class DataBase(DBConnector):
             '''
         ])
 
+    def get_employees_details(self):
+        '''
+        Returns a list of employees with their details
+        '''
+        response = self.execute_one(f'''
+            SELECT e.*,c.*,d.*
+            FROM {self.schema}.employee_company ec
+            INNER JOIN {self.schema}.employee e  
+                on e.employee_id = ec.employee_id 
+            INNER JOIN {self.schema}.company c 
+                on c.company_id = ec.company_id
+            INNER JOIN {self.schema}.department d 
+                on d.department_id = ec.department_id;
+        ''')
+        return response
+
 
 class Employee(DataBase):
     '''
@@ -127,10 +143,11 @@ class Employee(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (first_name,last_name,email,phone1,phone2)
-            VALUES ('{first_name}','{last_name}','{email}','{phone1}','{phone2}')
-            ON CONFLICT (email) DO UPDATE
-                SET email=excluded.email
+            INSERT INTO {self.schema}.{self.table}(first_name, last_name, email, phone1, phone2)
+            VALUES('{first_name}', '{last_name}',
+                   '{email}', '{phone1}', '{phone2}')
+            ON CONFLICT(email) DO UPDATE
+                SET email = excluded.email
             RETURNING employee_id;
             '''
         )
@@ -152,10 +169,10 @@ class Company(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (name,address,city,state,zip)
-            VALUES ('{name}', '{address}', '{city}', '{state}', '{zip_code}')
-            ON CONFLICT (name) DO UPDATE
-                SET name=excluded.name
+            INSERT INTO {self.schema}.{self.table}(name, address, city, state, zip)
+            VALUES('{name}', '{address}', '{city}', '{state}', '{zip_code}')
+            ON CONFLICT(name) DO UPDATE
+                SET name = excluded.name
             RETURNING company_id;
             '''
         )
@@ -178,10 +195,10 @@ class Department(DataBase):
         '''
         response = self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (name)
-                VALUES ('{name}')
-            ON CONFLICT (name) DO UPDATE
-                SET name=excluded.name
+            INSERT INTO {self.schema}.{self.table}(name)
+                VALUES('{name}')
+            ON CONFLICT(name) DO UPDATE
+                SET name = excluded.name
             RETURNING department_id;
             '''
         )
@@ -204,14 +221,14 @@ class CompanyEmployee(DataBase):
         '''
         self.execute_one(
             f'''
-            INSERT INTO {self.schema}.{self.table} (
+            INSERT INTO {self.schema}.{self.table}(
                 employee_id, company_id, department_id
             )
-            VALUES ({employee_id}, {company_id}, {department_id})
-            ON CONFLICT (employee_id, company_id, department_id) DO UPDATE
-                SET employee_id=excluded.employee_id,
-                    company_id=excluded.company_id,
-                    department_id=excluded.department_id
+            VALUES({employee_id}, {company_id}, {department_id})
+            ON CONFLICT(employee_id, company_id, department_id) DO UPDATE
+                SET employee_id = excluded.employee_id,
+                    company_id = excluded.company_id,
+                    department_id = excluded.department_id
             RETURNING id;
             '''
         )

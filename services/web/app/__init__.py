@@ -2,6 +2,7 @@
 Database model definition
 '''
 
+from email import message
 import os
 
 from flask import Flask, jsonify, request
@@ -12,7 +13,33 @@ app = Flask(__name__)
 
 @ app.route("/")
 def hello_world():
-    return jsonify(hello="hello from flask")
+    return jsonify(message="hello from flask"), 200
+
+
+@app.route("/registry/list", methods=["GET"])
+def list_registry():
+    '''
+    List all employees with details
+    '''
+    employee = Employee()
+    employees_details = employee.get_employees_details()
+    employees = [{
+        "employee_id": employee_detail[0],
+        "first_name": employee_detail[1],
+        "last_name": employee_detail[2],
+        "email": employee_detail[3],
+        "phone1": employee_detail[4],
+        "phone2": employee_detail[5],
+        "company_id": employee_detail[6],
+        "company_name": employee_detail[7],
+        "address": employee_detail[8],
+        "city": employee_detail[9],
+        "state": employee_detail[10],
+        "zip_code": employee_detail[11],
+        "department_id": employee_detail[12],
+        "department_name": employee_detail[13]
+    } for employee_detail in employees_details]
+    return jsonify(message=employees), 200
 
 
 @app.route("/registry", methods=["POST"])

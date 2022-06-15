@@ -5,9 +5,10 @@
 - [Table of Contents](#contents)
 - [Introduction](#introduction)
 - [Technologies](#technologies)
-- [Data Structures](#data-structures)
+- [Data Structure](#data-structure)
 - [Environment variables](#env-vars)
-- [Run locally](#run-locally)
+- [Development Environment](#development)
+- [Production environment](#production)
 - [Deployment](#deployment)
 
 ## Introduction
@@ -22,7 +23,7 @@ In the development of this application the following technologies were used:
 - [Flask](https://flask.palletsprojects.com/en/2.1.x/): The python web framework to manage the api.
 - [Docker](https://www.docker.com/): The containerization technology used in this application.
 - [PostgreSQL](https://www.postgresql.org/): The database technology for storing the directory information.
-= [Gnginx](https://www.nginx.com/): The web server technology used in this application.
+- [Gnginx](https://www.nginx.com/): The web server technology used in this application.
 
 
 ## Data Structures <a name= "data-structure"></a>
@@ -63,15 +64,17 @@ source .env
 ```
 
 
-## Development Environment <a name = "run-locally"></a>
+## Development Environment <a name = "development"></a>
 Once you have set the default [environment variables](#env-vars), you can run the application locally by running the following docker command:
 ```
 docker-compose up -d --build
 ```
 After running the command, you can access the application by visiting [http://localhost:5000/](http://localhost:5000/). You will see the following hello message:
+```json
 {
   "message": "hello from flask server**"
 }
+```
 
 The logs could be viewed by running the following command:
 ```
@@ -83,7 +86,7 @@ and you can stop the application by running the following command:
 docker-compose down -v
 ```
 
-## Production environment
+## Production environment <a name = "production"></a>
 
 For the production environment, you must set the variable `FLASK_ENV` to `production` and then run the following command:
 
@@ -92,10 +95,11 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 After running the command, you can access the application by visiting [http://localhost:5000/](http://localhost:5000/). You will see the following hello message:
+```json
 {
   "message": "hello from flask server**"
 }
-
+```
 After figuring out the server is running, create the database and tables by running the following command:
 
 ```bash

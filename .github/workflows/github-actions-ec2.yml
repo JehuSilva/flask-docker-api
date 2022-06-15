@@ -15,7 +15,7 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
 
-      - name: Deploy to Server 1
+      - name: Deploy to EC2 Server
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -24,7 +24,8 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
 
       - name: Build and start containers
-        env: 
+        uses: actions/checkout@v2
+        env:
           FLASK_ENV: ${{ secrets.FLASK_ENV }}
           FLASK_APP: ${{ secrets.FLASK_APP }}
           POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}

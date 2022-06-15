@@ -1,7 +1,12 @@
 # Register API Reference
 
+In this section, we will describe the API endpoints and how to use them.
 
-## Register an employee
+## Current available endpoints 
+- [/registry/](#registry): Register a new employee
+- [/registry/list](#registry-list): Get all registred employees
+
+## Register an employee <a name = "registry"></a>
 ```http
 POST /registry
 ```
@@ -22,7 +27,7 @@ POST /registry
 
 Bash example:
 ```bash
-curl --location --request POST 'http://3.18.169.228/registry?first_name=Jehu&last_name=Silva&email=ijehusa@gmail.com&phone1=9512465454&phone2=5545465156&company_name=Coca-Cola&address=Eje Central 654, Coyoacan&city=Ciudad de Mexico&state=Ciudad de Mexico&zip=56424&department=Marketing'
+curl --location --request POST 'http://localhost:5000/registry?first_name=Jehu&last_name=Silva&email=ijehusa@gmail.com&phone1=9512465454&phone2=5545465156&company_name=Coca-Cola&address=Eje Central 654, Coyoacan&city=Ciudad de Mexico&state=Ciudad de Mexico&zip=56424&department=Marketing'
 ```
 
 Returns:
@@ -33,7 +38,7 @@ Returns:
 ```
 
 
-## Get all employees registered
+## Get all registred employees <a name = "registry-list"></a>
 
 ```http
 GET /registry/list
@@ -70,29 +75,8 @@ Returns:
 }
 ```
 
-## Get an employee by id
-```http 
-GET /registry/{employee_id}
-```
+## TODO
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `employee_id` | `int` | **Required**. Id of the empoyee to get |
-
-
-
-
-## Delete an employee
-
-    
-```http 
-DELETE /registry/{employee_id}
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `employee_id` | `int` | **Required**. Id of the empoyee to delete |
-
-
+Include the documentation for the API endpoints for DELETE, PUT AND PATCH.
 
 

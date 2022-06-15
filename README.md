@@ -1,29 +1,34 @@
 # Directory Flask Application
 
-## Introduction
-This is an application that manages a directory database. It provides a simple interface for adding, updating, removing, and listing an employees directory. The application is written in Python using the Flask framework and Docker.
-
-The challenge that this application tries to solve is to create a management model of a data structure as shown in this [dataset](services/python_server/dataset/sample_data.csv).
-
-# Data Structure
-
-The model E-R diagram below shows the data structure of the application.
-<img src="https://raw.githubusercontent.com/JehuSilva/register_api/develop/database/ER_diagram.svg" width="80%" height="40%">
-
 ## Table of Contents <a name = "contents"></a>
 
-- [Introduction](#introduction)
 - [Table of Contents](#contents)
+- [Introduction](#introduction)
 - [Technologies](#technologies)
+- [Data Structures](#data-structures)
 - [Environment variables](#env-vars)
+- [Run locally](#run-locally)
+- [Deployment](#deployment)
 
+## Introduction
+This is an application writen Python using the Flask framework and Docker that manages a directory database. It provides a simple interface for adding, updating, removing, and listing an employees directory.
 
-## Technologies used <a name = "technologies"></a>
+The challenge that this application tries to solve is to create a management model for the dataset found in this [file](services/python_server/dataset/sample_data.csv).
+## Technologies <a name = "technologies"></a>
 
-- [Flask](https://flask.palletsprojects.com/en/2.1.x/): The web framework to manage the api.
+In the development of this application the following technologies were used:
+
+- [Python](https://www.python.org/): The programming language used in this application.
+- [Flask](https://flask.palletsprojects.com/en/2.1.x/): The python web framework to manage the api.
 - [Docker](https://www.docker.com/): The containerization technology used in this application.
 - [PostgreSQL](https://www.postgresql.org/): The database technology for storing the directory information.
 
+
+## Data Structures <a name= "data-structure"></a>
+
+The model E-R diagram below shows the data structure designed for database of this application.
+
+<img src="https://raw.githubusercontent.com/JehuSilva/register_api/develop/database/ER_diagram.svg" width="80%" height="40%">
 
 ## Environment Variables <a name = "env-vars"></a>
 
@@ -57,24 +62,8 @@ source .env
 ```
 
 
-## Build
-
-### Prerequisites
-
-To use the application you must to difine you environment variables. You must to create a `.env.dev` in the root directory of the project with the following content:
-
-```bash
-FLASK_APP=app/__init__.py
-FLASK_ENV=development
-DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
-SQL_HOST=db
-SQL_PORT=5432
-DATABASE=postgres
-```
-
-### Development
-
-Instructions for setting up the development environment:
+## Run locally <a name = "run-locally"></a>
+Once you have set the [environment variables](#env-vars), you can run the application locally by running the following docker command:
 
 Update the file permissions locally:
 
@@ -92,6 +81,9 @@ If you want to kill the containers and clean the volumes:
 
 ```bash
 docker-compose down -v
+## Deployment <a name = "deployment"></a>
+### Development
+
 ```
 
 ### Production

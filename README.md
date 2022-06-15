@@ -176,4 +176,4 @@ It will make some post requests to the api and you will see the logs.
 
 ## Api Documentation <a name = "api-documentation"></a>
 
-You can find the documentation for the api in the [docs/api_documentation.md](docs/api_documentation.md).
+You can find the documentation for the api in the [docs/api_documentation.md](docs/api_documentation.md) file.

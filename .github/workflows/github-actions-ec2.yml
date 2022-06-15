@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   deploy:
@@ -23,8 +26,10 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
 
-      - name: Build and start containers
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Start containers
         env:
           FLASK_ENV: ${{ secrets.FLASK_ENV }}
           FLASK_APP: ${{ secrets.FLASK_APP }}

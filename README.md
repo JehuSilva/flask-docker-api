@@ -22,6 +22,7 @@ In the development of this application the following technologies were used:
 - [Flask](https://flask.palletsprojects.com/en/2.1.x/): The python web framework to manage the api.
 - [Docker](https://www.docker.com/): The containerization technology used in this application.
 - [PostgreSQL](https://www.postgresql.org/): The database technology for storing the directory information.
+= [Gnginx](https://www.nginx.com/): The web server technology used in this application.
 
 
 ## Data Structures <a name= "data-structure"></a>
@@ -62,54 +63,52 @@ source .env
 ```
 
 
-## Run locally <a name = "run-locally"></a>
-Once you have set the [environment variables](#env-vars), you can run the application locally by running the following docker command:
-
-Update the file permissions locally:
-
-```bash
-chmod +x services/web/entrypoint.sh
+## Development Environment <a name = "run-locally"></a>
+Once you have set the default [environment variables](#env-vars), you can run the application locally by running the following docker command:
 ```
-After that, run the following command to build the image:
-
-```bash
 docker-compose up -d --build
-docker-compose exec db psql --username=postgres --dbname=postgres
+```
+After running the command, you can access the application by visiting [http://localhost:5000/](http://localhost:5000/). You will see the following hello message:
+{
+  "message": "hello from flask server**"
+}
+
+The logs could be viewed by running the following command:
+```
+docker-compose logs -f
 ```
 
-If you want to kill the containers and clean the volumes:
-
-```bash
+and you can stop the application by running the following command:
+```
 docker-compose down -v
-## Deployment <a name = "deployment"></a>
-### Development
-
 ```
 
-### Production
+## Production environment
 
-Instructions for setting up the production environment:
-
-
-Update the file permissions locally:
-
-```bash
-chmod +x services/web/entrypoint.sh
-```
-
-After that, run the following command to build the image:
+For the production environment, you must set the variable `FLASK_ENV` to `production` and then run the following command:
 
 ```bash
 docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
-Build the database using the SQLAlchemy ORM:
+After running the command, you can access the application by visiting [http://localhost:5000/](http://localhost:5000/). You will see the following hello message:
+{
+  "message": "hello from flask server**"
+}
+
+After figuring out the server is running, create the database and tables by running the following command:
+
 ```bash
 docker-compose -f docker-compose.prod.yml exec web python manage.py migrate
 ```
+Once the database is created, you can now use the api endpoints.
 
-If you want to kill the containers and clean the volumes:
 
-```bash
-docker-compose -f docker-compose.prod.yml down -v
+If you want to see the logs of the application, you can run the following command:
+```
+docker-compose -f docker-compose.prod.yml logs -f
+```
+and you can kill the application by runniong the following command:
+```
+docker-compose -f docker-compose.prod.yml down -v 
 ```

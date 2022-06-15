@@ -26,6 +26,8 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
 
+      - uses: actions/checkout@v2
+
       - name: Start containers
         env:
           FLASK_ENV: ${{ secrets.FLASK_ENV }}

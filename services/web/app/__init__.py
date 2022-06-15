@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @ app.route("/")
 def hello_world():
-    return jsonify(message="Welcome to the Register API. Xal Digital"), 200
+    return jsonify(message="Welcome to the Register API. **Xal Digital**"), 200
 
 
 @app.route("/registry/list", methods=["GET"])

@@ -31,9 +31,13 @@ In the development of this application the following technologies were used:
 
 ## Data Structures <a name= "data-structure"></a>
 
-The model E-R diagram below shows the data structure designed for database of this application.
+The model E-R diagram below shows the data structure designed for database of this application
 
 <img src="https://raw.githubusercontent.com/JehuSilva/register_api/develop/database/ER_diagram.svg" width="80%" height="40%">
+
+and the script to build the database if found in the [database/create_db.sql](database/create_db.sql) file.
+
+
 
 ## Environment Variables <a name = "env-vars"></a>
 
@@ -149,7 +153,10 @@ docker-compose -f docker-compose.prod.yml down -v
 
 ## Use <a name = "use"></a>
 
-Once your application is running, you can find some example how you can use the api in the [examples folder](examples/). Got to the [folder](examples/) and run the following commands:
+Once your application is running, you can find a example how you can use the api in the [examples folder](examples/). This script reads [examples/dataset/sample_data.csv](examples/dataset/sample_data.csv) and inserts the data into the database using the api.
+
+
+Got to the [folder](examples/) and run the following commands:
 
 1. Set the environment variable `APP_HOST` to `http://localhost:5000/` if you are running the application locally. Otherwise, set the environment variable `APP_HOST` to the public DNS record of the instance.
 ```bash

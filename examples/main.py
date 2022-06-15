@@ -1,9 +1,14 @@
 '''
-This script will load all the employees from the sample_data.csv file
-and register them in the database using the API.
+This script is an example how you can use the API.
+
+It will read the sample_data.csv file and register all the employees in the database
+using the API.
 '''
 import requests
 import pandas
+import os
+
+HOST = os.getenv('APP_HOST', 'http//:localhost:5000')
 
 
 def register(employee: dict = {}):
@@ -33,9 +38,7 @@ def register(employee: dict = {}):
     }
     try:
         # Make a post request to the API
-        response = requests.post(
-            'http://flask_app:5000/registry', params=params
-        )
+        response = requests.post(F'{HOST}/registry', params=params)
         if response.status_code == 200:
             print(
                 'Successfully registered employee '

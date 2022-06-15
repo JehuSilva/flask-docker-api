@@ -1,10 +1,6 @@
 '''
 Database model definition
 '''
-
-from email import message
-import os
-
 from flask import Flask, jsonify, request
 from app.models import Employee, Company, Department, CompanyEmployee
 
@@ -35,9 +31,9 @@ def list_registry():
         "address": employee_detail[8],
         "city": employee_detail[9],
         "state": employee_detail[10],
-        "zip_code": employee_detail[11],
+        "zip": employee_detail[11],
         "department_id": employee_detail[12],
-        "department_name": employee_detail[13]
+        "department": employee_detail[13]
     } for employee_detail in employees_details]
     return jsonify(message=employees), 200
 

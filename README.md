@@ -11,6 +11,8 @@
 - [Deploy](#deploy)
   - [CI/CD](#ci-cd)
   - [Manual deployment](#manual-deployment)
+- [Use](#use)
+- [Api Documentation](docs/api_documentation.md)
 
 ## Introduction
 This is an application writen Python using the Flask framework and Docker that manages a directory database. It provides a simple interface for adding, updating, removing, and listing an employees directory.
@@ -144,3 +146,34 @@ and you can stop the application by running the following command:
 ```
 docker-compose -f docker-compose.prod.yml down -v 
 ```
+
+## Use <a name = "use"></a>
+
+Once your application is running, you can find some example how you can use the api in the [examples folder](examples/). Got to the [folder](examples/) and run the following commands:
+
+1. Set the environment variable `HOST` to `http://localhost:5000/` if you are running the application locally. Otherwise, set the environment variable `HOST` to the public DNS record of the instance.
+```bash
+export APP_HOST="http://localhost:5000/"
+```
+
+2. Create and activate a python virtual environment with [venv](https://docs.python.org/3/library/venv.html)
+```bash
+pyton3 -m venv venv
+source venv/bin/activate
+```
+
+3. Install the dependencies
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the application
+```bash
+python main.py
+```
+
+It will make some post requests to the api and you will see the logs.
+
+
+
+

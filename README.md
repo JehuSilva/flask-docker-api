@@ -17,7 +17,7 @@
 ## Introduction
 This is an application writen Python using the Flask framework and Docker that manages a directory database. It provides a simple interface for adding, updating, removing, and listing an employees directory.
 
-The challenge that this application tries to solve is to create a management model for the dataset found in this [file](services/python_server/dataset/sample_data.csv).
+The challenge that this application tries to solve is to create a management model for the dataset found in this [file](examples/dataset/sample_data.csv).
 ## Technologies <a name = "technologies"></a>
 
 In the development of this application the following technologies were used:

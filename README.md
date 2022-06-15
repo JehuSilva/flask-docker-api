@@ -153,10 +153,10 @@ docker-compose -f docker-compose.prod.yml down -v
 
 ## Use <a name = "use"></a>
 
-Once your application is running, you can find a example how you can use the api in the [examples folder](examples/). This script reads [examples/dataset/sample_data.csv](examples/dataset/sample_data.csv) and inserts the data into the database using the api.
+Once your application is running, you can find a example application written in Python that shows how you can use the api programmatically, This application is found in the [examples/](examples/) folder. The [script](examples/main.py) reads the [sample_data.csv](examples/dataset/sample_data.csv) file and inserts the data into the database using the api.
 
+To run the application, go to the [folder](examples/) and follow the next steps:
 
-Got to the [folder](examples/) and run the following commands:
 
 1. Set the environment variable `APP_HOST` to `http://localhost:5000/` if you are running the application locally. Otherwise, set the environment variable `APP_HOST` to the public DNS record of the instance.
 ```bash

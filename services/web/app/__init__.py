@@ -47,7 +47,7 @@ def create_registry():
     '''
     This method creates one registry in the database
     '''
-    # Instantiate the model
+    # Instantiate the model tables
     employee = Employee()
     company = Company()
     department = Department()
@@ -55,17 +55,17 @@ def create_registry():
 
     # Retrieve the data from the request
     try:
-        first_name = request.args.get('first_name')
-        last_name = request.args.get('last_name')
-        email = request.args.get('email')
-        phone1 = request.args.get('phone1')
-        phone2 = request.args.get('phone2')
-        company_name = request.args.get('company_name')
-        address = request.args.get('address')
-        city = request.args.get('city')
-        state = request.args.get('state')
-        zip_code = request.args.get('zip')
-        department_name = request.args.get('department')
+        first_name = request.args.get('first_name', None)
+        last_name = request.args.get('last_name', None)
+        email = request.args.get('email', None)
+        phone1 = request.args.get('phone1', None)
+        phone2 = request.args.get('phone2', None)
+        company_name = request.args.get('company_name', None)
+        address = request.args.get('address', None)
+        city = request.args.get('city', None)
+        state = request.args.get('state', None)
+        zip_code = request.args.get('zip', None)
+        department_name = request.args.get('department', None)
     except Exception as e:
         return jsonify({'message': 'Bad parameters', 'error': str(e)}), 400
 

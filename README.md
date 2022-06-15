@@ -12,7 +12,7 @@
   - [CI/CD](#ci-cd)
   - [Manual deployment](#manual-deployment)
 - [Use](#use)
-- [Api Documentation](docs/api_documentation.md)
+- [Api Documentation](#api-documentation)
 
 ## Introduction
 This is an application writen Python using the Flask framework and Docker that manages a directory database. It provides a simple interface for adding, updating, removing, and listing an employees directory.
@@ -26,7 +26,7 @@ In the development of this application the following technologies were used:
 - [Flask](https://flask.palletsprojects.com/en/2.1.x/): The python web framework to manage the api.
 - [Docker](https://www.docker.com/): The containerization technology used in this application.
 - [PostgreSQL](https://www.postgresql.org/): The database technology for storing the directory information.
-- [Gnginx](https://www.nginx.com/): The web server technology used in this application.
+- [Nginx](https://www.nginx.com/): The web server technology used in this application.
 
 
 ## Data Structures <a name= "data-structure"></a>
@@ -151,7 +151,7 @@ docker-compose -f docker-compose.prod.yml down -v
 
 Once your application is running, you can find some example how you can use the api in the [examples folder](examples/). Got to the [folder](examples/) and run the following commands:
 
-1. Set the environment variable `HOST` to `http://localhost:5000/` if you are running the application locally. Otherwise, set the environment variable `HOST` to the public DNS record of the instance.
+1. Set the environment variable `APP_HOST` to `http://localhost:5000/` if you are running the application locally. Otherwise, set the environment variable `APP_HOST` to the public DNS record of the instance.
 ```bash
 export APP_HOST="http://localhost:5000/"
 ```
@@ -174,6 +174,6 @@ python main.py
 
 It will make some post requests to the api and you will see the logs.
 
+## Api Documentation <a name = "api-documentation"></a>
 
-
-
+You can find the documentation for the api in the [docs/api_documentation.md](docs/api_documentation.md).

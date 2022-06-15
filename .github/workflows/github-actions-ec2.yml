@@ -32,9 +32,16 @@ jobs:
 
       - name: Deploy to EC2 Server
         uses: easingthemes/ssh-deploy@main
-        run: docker-compose -f docker-compose.prod.yml up -d --build
-
-      # - name: Test machine
-      #   run: docker image ls
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script_stop: true
+          script: |
+            docker-compose -f docker-compose.prod.yml up -d --build
 
       # - name: Start containers
+      #   run: docker-compose -f docker-compose.prod.yml up -d --build

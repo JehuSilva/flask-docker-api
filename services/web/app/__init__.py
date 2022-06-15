@@ -35,7 +35,7 @@ def list_registry():
         "department_id": employee_detail[12],
         "department": employee_detail[13]
     } for employee_detail in employees_details]
-    return jsonify(message=employees), 200
+    return jsonify(employees=employees), 200
 
 
 @app.route("/registry", methods=["POST"])

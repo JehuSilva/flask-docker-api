@@ -164,6 +164,7 @@ data/
 *.sql
 
 # documents
-docs/
+docs/*.pdf
+docs/*.txt
 
 *.pem

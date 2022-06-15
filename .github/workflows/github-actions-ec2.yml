@@ -32,5 +32,9 @@ jobs:
 
       - name: Deploy to EC2 Server
         uses: easingthemes/ssh-deploy@main
+
+      - name: Test machine
+        run: docker image ls
+
       - name: Start containers
         run: docker-compose -f docker-compose.prod.yml up -d --build

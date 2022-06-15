@@ -79,7 +79,7 @@ After running the command, you can access the application by visiting [http://lo
 {
   "message": "hello from flask server**"
 }
-
+```
 
 The logs could be displayed by running the next command:
 

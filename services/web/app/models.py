@@ -153,6 +153,22 @@ class Employee(DataBase):
         )
         return response[0][0]
 
+    # def update(self, employee_id: int, first_name: str, last_name: str, email: str, phone1: str, phone2: str):
+    #     '''
+    #     Updates an employee in the database
+    #     '''
+    #     self.execute_one(
+    #         f'''
+    #         UPDATE {self.schema}.{self.table}
+    #         SET first_name = '{first_name}',
+    #             last_name = '{last_name}',
+    #             email = '{email}',
+    #             phone1 = '{phone1}',
+    #             phone2 = '{phone2}',
+
+    #         WHERE employee_id = {employee_id};
+    #         '''
+
 
 class Company(DataBase):
     '''
@@ -172,7 +188,7 @@ class Company(DataBase):
             INSERT INTO {self.schema}.{self.table}(name, address, city, state, zip)
             VALUES('{name}', '{address}', '{city}', '{state}', '{zip_code}')
             ON CONFLICT(name) DO UPDATE
-                SET name = excluded.name
+                SET name=excluded.name
             RETURNING company_id;
             '''
         )
@@ -180,7 +196,7 @@ class Company(DataBase):
 
 
 class Department(DataBase):
-    '''*
+    ''' *
     This class manage the department table
     '''
 
@@ -198,7 +214,7 @@ class Department(DataBase):
             INSERT INTO {self.schema}.{self.table}(name)
                 VALUES('{name}')
             ON CONFLICT(name) DO UPDATE
-                SET name = excluded.name
+                SET name=excluded.name
             RETURNING department_id;
             '''
         )
@@ -226,9 +242,9 @@ class CompanyEmployee(DataBase):
             )
             VALUES({employee_id}, {company_id}, {department_id})
             ON CONFLICT(employee_id, company_id, department_id) DO UPDATE
-                SET employee_id = excluded.employee_id,
-                    company_id = excluded.company_id,
-                    department_id = excluded.department_id
+                SET employee_id=excluded.employee_id,
+                    company_id=excluded.company_id,
+                    department_id=excluded.department_id
             RETURNING id;
             '''
         )

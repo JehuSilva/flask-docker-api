@@ -31,21 +31,24 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Deploy to EC2 Server
-        uses: easingthemes/ssh-deploy@main
+        uses: easingthemes/ssh-deploy@master
 
-      - name: AWS SSM Send-Command
-        uses: peterkimzz/aws-ssm-send-command@master
-        id: ssm
-        with:
-          aws-region: ${{ secrets.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          instance-ids: ${{ secrets.INSTANCE_ID }}
+      - name: Start containers
+        run: docker-compose -f docker-compose.prod.yml up -d --build
 
-          working-directory: /home/ubuntu/register_api
-          command: docker-compose -f docker-compose.prod.yml up -d --build
-          comment: Docker command
+      # - name: AWS SSM Send-Command
+      #   uses: peterkimzz/aws-ssm-send-command@master
+      #   id: ssm
+      #   with:
+      #     aws-region: ${{ secrets.AWS_REGION }}
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     instance-ids: ${{ secrets.INSTANCE_ID }}
 
-      # Catch SSM outputs
-      - name: Get the outputs
-        run: echo "The Command id is ${{ steps.ssm.outputs.command-id }}"
+      #     working-directory: /home/ubuntu/register_api
+      #     command: docker-compose -f docker-compose.prod.yml up -d --build
+      #     comment: Docker command
+
+      # # Catch SSM outputs
+      # - name: Get the outputs
+      #   run: echo "The Command id is ${{ steps.ssm.outputs.command-id }}"

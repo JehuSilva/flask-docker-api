@@ -77,7 +77,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 After running the command, you can access the application by visiting [http://localhost:5000/](http://localhost:5000/) and you will see a hello message
 ```json
 {
-  "message": "hello from flask server**"
+  "message": "Welcome to the flask server. This application is a test for Xal Digital"
 }
 ```
 
@@ -126,7 +126,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 After running the command, you can access the application by visiting [http://localhost:5000/](http://localhost:5000/) and you will see a hello message
 ```json
 {
-  "message": "hello from flask server**"
+  "message": "Welcome to the flask server. This application is a test for Xal Digital"
 }
 ```
 2. Build the database

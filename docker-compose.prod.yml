@@ -4,6 +4,7 @@ services:
   db:
     image: postgres
     container_name: postgre_db
+    restart: unless-stopped
     ports:
       - "5432:5432"
     volumes:
@@ -16,6 +17,7 @@ services:
     build:
       context: ./services/web
       dockerfile: Dockerfile.prod
+    restart: unless-stopped
     image: flask_env
     container_name: flask_app
     command: gunicorn --bind 0.0.0.0:5000 manage:app
@@ -32,6 +34,7 @@ services:
     depends_on:
       - db
   nginx:
+    restart: unless-stopped
     build: ./services/nginx
     container_name: gninx
     image: nginx

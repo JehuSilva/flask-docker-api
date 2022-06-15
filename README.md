@@ -8,7 +8,7 @@ The challenge that this application tries to solve is to create a management mod
 # Data Structure
 
 The model E-R diagram below shows the data structure of the application.
-<img src="https://raw.githubusercontent.com/JehuSilva/register_api/develop/database/ER_diagram.svg">
+<img src="https://raw.githubusercontent.com/JehuSilva/register_api/develop/database/ER_diagram.svg" width="80%" height="40%">
 
 ## Table of Contents <a name = "contents"></a>
 

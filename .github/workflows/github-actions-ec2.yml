@@ -30,8 +30,11 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
 
-      - name: Start containers
-        run: docker-compose -f docker-compose.prod.yml up -d --build
+      # - name: Start containers
+      #   run: docker-compose -f docker-compose.prod.yml up -d --build
+
+      - name: executing remote ssh commands using ssh key
+        uses: appleboy/ssh-action@master
         env:
           FLASK_ENV: ${{ secrets.FLASK_ENV }}
           FLASK_APP: ${{ secrets.FLASK_APP }}
@@ -40,3 +43,10 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+        with:
+          host: ${{ secrets.HOST_DNS }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
+            docker-compose -f docker-compose.prod.yml up -d --build

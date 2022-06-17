@@ -30,9 +30,6 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
 
-      - name: Where Iam
-        run: pwd
-
       - name: Start containers
         run: docker-compose -f docker-compose.prod.yml up -d --build
         env:

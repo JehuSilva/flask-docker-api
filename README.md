@@ -1,4 +1,4 @@
-# Directory Flask Application
+# Simple backend service based on Flask and Docker
 
 ## Table of Contents <a name = "contents"></a>
 
@@ -15,9 +15,9 @@
 - [Api Documentation](#api-documentation)
 
 ## Introduction
-This is an application writen Python using the Flask framework and Docker that manages a directory database. It provides a simple interface for adding, updating, removing, and listing an employees directory.
+This is an application writen Python using the Flask framework and Docker that manages a database. It provides a simple interface for adding, updating, removing, and listing records for a PostgreSQL schema in a simple way.
 
-The challenge that this application tries to solve is to create a management model for the dataset found in this [file](examples/dataset/sample_data.csv).
+The challenge that this application solves is to create a model and backend service for the dataset found in this [file](examples/dataset/sample_data.csv). This was solved by designing an optimized schema to store the rows of the dataset and an API to register and read information in a simple way.
 ## Technologies <a name = "technologies"></a>
 
 In the development of this application the following technologies were used:

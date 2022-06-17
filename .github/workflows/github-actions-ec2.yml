@@ -49,4 +49,4 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: |
-            docker-compose -f docker-compose.prod.yml up -d --build
+            pwd && cd /home/ubuntu/register_api && docker-compose -f docker-compose.prod.yml up -d --build

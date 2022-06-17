@@ -30,9 +30,6 @@ jobs:
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
           POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
 
-      # - name: Start containers
-      #   run: docker-compose -f docker-compose.prod.yml up -d --build
-
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         env:

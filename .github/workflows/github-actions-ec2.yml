@@ -13,22 +13,6 @@ jobs:
   deploy:
     name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
-    env:
-      SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-      REMOTE_HOST: ${{ secrets.HOST_DNS }}
-      REMOTE_USER: ${{ secrets.USERNAME }}
-      TARGET: ${{ secrets.TARGET_DIR }}
-      FLASK_ENV: ${{ secrets.FLASK_ENV }}
-      FLASK_APP: ${{ secrets.FLASK_APP }}
-      POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-      POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
-      aws-region: ${{ secrets.AWS_REGION }}
-      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      instance-ids: ${{ secrets.INSTANCE_ID }}
 
     steps:
       - name: Checkout the files
@@ -36,22 +20,42 @@ jobs:
 
       - name: Deploy to EC2 Server
         uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
 
-      - name: AWS SSM Send-Command
-        uses: peterkimzz/aws-ssm-send-command@master
-        id: ssm
-        with:
-          # aws-region: ${{ secrets.AWS_REGION }}
-          # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # instance-ids: ${{ secrets.INSTANCE_ID }}
-          working-directory: /home/ubuntu/application
-          command: docker-compose -f docker-compose.prod.yml up -d --build
-          comment: Building an run docker containers
+      - name: Start containers
+        run: docker-compose -f docker-compose.prod.yml up -d --build
 
-      # Catch SSM outputs
-      - name: Get the outputs
-        run: echo "The Command id is ${{ steps.ssm.outputs.command-id }}"
+      # Deploy:
+      #   needs: build
+      #   runs-on: ubuntu-latest
 
-      # - name: Start containers
-      #   run: docker-compose -f docker-compose.prod.yml up -d --build
+      #   steps:
+      - uses: actions/checkout@v2
+      - name: Deploy in EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY  }}
+          HOSTNAME: ${{ secrets.HOST_DNS  }}
+          USER_NAME: ${{ secrets.USERNAME  }}
+          FLASK_ENV: ${{ secrets.FLASK_ENV }}
+          FLASK_APP: ${{ secrets.FLASK_APP }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+
+            #Now we have got the access of EC2 and we will start the deploy .
+            cd ${TARGET_DIR} &&
+            git checkout master &&
+            git fetch --all &&
+            git reset --hard origin/master &&
+            git pull origin master &&
+            docker-compose -f docker-compose.prod.yml up -d --build

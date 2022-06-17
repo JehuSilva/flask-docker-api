@@ -75,7 +75,7 @@ class DataBase(DBConnector):
                 last_name varchar(50) NOT NULL,
                 email varchar(50) UNIQUE NOT NULL,
                 phone1 varchar(50) NOT NULL,
-                phone2 varchar(50)
+                phone2 varchar(50) NOT NULL
             );
             ''',
             f'''
@@ -152,22 +152,6 @@ class Employee(DataBase):
             '''
         )
         return response[0][0]
-
-    # def update(self, employee_id: int, first_name: str, last_name: str, email: str, phone1: str, phone2: str):
-    #     '''
-    #     Updates an employee in the database
-    #     '''
-    #     self.execute_one(
-    #         f'''
-    #         UPDATE {self.schema}.{self.table}
-    #         SET first_name = '{first_name}',
-    #             last_name = '{last_name}',
-    #             email = '{email}',
-    #             phone1 = '{phone1}',
-    #             phone2 = '{phone2}',
-
-    #         WHERE employee_id = {employee_id};
-    #         '''
 
 
 class Company(DataBase):

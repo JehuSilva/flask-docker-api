@@ -16,13 +16,13 @@ POST /registry
 | `first_name` | `string` | **Required**. First of the employee |
 | `last_name` | `string` | **Required**. Last of the employee |
 | `company_name` | `string` | **Required**. Company of the employee |
-| `address` | `string` | **Optional**. Company address |
-| `city` | `string` | **Optional**. Company city |
-| `state` | `string` | **Optional**. Company state |
+| `address` | `string` | **Required**. Company address |
+| `city` | `string` | **Required**. Company city |
+| `state` | `string` | **Required**. Company state |
 | `email` | `string` | **Required**. Employee email |
 | `phone1` | `string` | **Required**. Employee phone1 |
-| `phone2` | `string` | **Optional**. Employee phone2 |
-| `zip` | `string` | **Optional**. Company zip code |
+| `phone2` | `string` | **Required**. Employee phone2 |
+| `zip` | `string` | **Required**. Company zip code |
 | `department` | `string` | **Required**. Departament of the employee |
 
 Bash example:

@@ -15,14 +15,39 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
 
-      - name: Deploy to Server 1
+      - name: Copy files to server
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
-# name: Push-to-EC2
+
+      - name: Deploy in EC2 Server
+      - uses: actions/checkout@v2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY  }}
+          HOSTNAME: ${{ secrets.HOST_DNS  }}
+          USER_NAME: ${{ secrets.USERNAME  }}
+          FLASK_ENV: ${{ secrets.FLASK_ENV }}
+          FLASK_APP: ${{ secrets.FLASK_APP }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+
+            #Now we have got the access of EC2 and we will start the deploy .
+            cd /home/ubuntu/register_api &&
+            git checkout master &&
+            git fetch --all &&
+            git reset --hard origin/master &&
+            git pull origin master &&
+            docker-compose -f docker-compose.prod.yml up -d --build
+    # name: Push-to-EC2
 
 # # Trigger deployment only on push to master branch
 # on:
@@ -58,27 +83,3 @@ jobs:
 #   runs-on: ubuntu-latest
 
 #   steps:
-# - uses: actions/checkout@v2
-# - name: Deploy in EC2
-#   env:
-#     PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY  }}
-#     HOSTNAME: ${{ secrets.HOST_DNS  }}
-#     USER_NAME: ${{ secrets.USERNAME  }}
-#     FLASK_ENV: ${{ secrets.FLASK_ENV }}
-#     FLASK_APP: ${{ secrets.FLASK_APP }}
-#     POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
-#     POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-#     POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-#     POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-#     POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
-#   run: |
-#     echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-#     ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-
-#       #Now we have got the access of EC2 and we will start the deploy .
-#       cd /home/ubuntu/register_api &&
-#       git checkout master &&
-#       git fetch --all &&
-#       git reset --hard origin/master &&
-#       git pull origin master &&
-#       docker-compose -f docker-compose.prod.yml up -d --build

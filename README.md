@@ -138,7 +138,14 @@ After running the command, you can access the application by visiting [http://lo
 docker-compose -f docker-compose.prod.yml exec web python manage.py migrate
 ```
 This commands execute the queries for create the schema and tables of the model. 
-*** NOTE: This command is just for the first time you are going to deploy your application. Keep in mind that it deletes the entire schema including the data. ***
+
+---
+**NOTE**
+
+This command is just for the first time you are going to deploy your application. Keep in mind that it deletes the entire schema including the data. 
+
+---
+
 Once the database is created, you can now use the api endpoints.
 
 

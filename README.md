@@ -33,7 +33,7 @@ In the development of this application the following technologies were used:
 
 The model E-R diagram below shows the data structure designed for database of this application
 
-<img src="https://raw.githubusercontent.com/JehuSilva/register_api/develop/database/ER_diagram.svg" width="80%" height="40%">
+<img src="database/ER_diagram.svg" width="80%" height="40%">
 
 and the script to build the database if found in the [database/create_db.sql](database/create_db.sql) file.
 

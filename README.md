@@ -75,7 +75,7 @@ Once you have set the default [environment variables](#env-vars), you can run th
 
 1. Build the application
 ```bash
-docker-compose -f docker-compose.prod.yml up -d --build
+docker-compose up -d --build
 ```
 
 After running the command, you can access the application by visiting [http://localhost:5000/](http://localhost:5000/) and you will see a hello message
